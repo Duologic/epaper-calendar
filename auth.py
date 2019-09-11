@@ -74,12 +74,3 @@ class GoogleCalendar(object):
         if self.credentials and self.credentials.expired and self.credentials.refresh_token:
             self.credentials.refresh(Request())
 
-
-b = GoogleCalendar()
-if not b.is_authenticated:
-    device = b.get_device_code()
-    print('Go to {} and enter {}'.format(device['verification_url'], device['user_code']))
-    b.wait_fetch_token()
-
-if b.is_authenticated:
-    print('Great Success')

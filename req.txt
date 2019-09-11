@@ -2,3 +2,7 @@ Pillow
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
+pyqrcode
+pypng
+RPi.GPIO
+spidev

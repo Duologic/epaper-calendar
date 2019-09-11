@@ -63,8 +63,4 @@ def draw_month():
                                     (row+1)*BOX_HEIGHT+TOP_ROW))
         count += 1
 
-    black_image.save('black.bmp')
-    red_image.save('red.bmp')
-
-
-draw_month()
+    return black_image, red_image
