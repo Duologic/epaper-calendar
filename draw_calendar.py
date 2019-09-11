@@ -11,7 +11,7 @@ EPD_WIDTH = 640
 EPD_HEIGHT = 384
 
 
-def draw_month():
+def draw_month(year, month, events):
     ROWS = 6
     COLS = 7
     TOP_ROW = 12
@@ -19,9 +19,9 @@ def draw_month():
     BOX_HEIGHT = (EPD_HEIGHT/ROWS) - (TOP_ROW/ROWS)
 
     if os.path.exists('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf'):
-        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 12)
+        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 10)
     else:
-        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 12)
+        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 10)
 
     black_image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 1)
     black_draw = ImageDraw.Draw(black_image)
@@ -51,7 +51,7 @@ def draw_month():
     today = datetime.date.today()
     count = 0
     text_padding = 2
-    for day in c.itermonthdays(2019, 9):
+    for day in c.itermonthdays(year, month):
         col = count - (COLS * (count // COLS))
         row = count // COLS
         if day > 0:
@@ -68,6 +68,20 @@ def draw_month():
                                     row*BOX_HEIGHT+TOP_ROW,
                                     (col+1)*BOX_WIDTH,
                                     (row+1)*BOX_HEIGHT+TOP_ROW))
+
+            if day in events:
+                line = 1
+                for event in events[day]:
+                    black_draw.text((col*BOX_WIDTH+text_padding,
+                                     row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
+                                    '{}'.format(event[1][0:16]), font=font)
+                    line += 1
+                    if line == 4:
+                        black_draw.text((col*BOX_WIDTH+text_padding,
+                                         row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
+                                        'more...', font=font)
+                        break
+
         count += 1
 
     return black_image, red_image

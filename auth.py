@@ -1,4 +1,6 @@
 # coding: utf-8
+import calendar
+import datetime
 import os.path
 import pickle
 import requests
@@ -6,6 +8,7 @@ import time
 
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 
 class GoogleCalendar(object):
@@ -74,3 +77,26 @@ class GoogleCalendar(object):
         if self.credentials and self.credentials.expired and self.credentials.refresh_token:
             self.credentials.refresh(Request())
 
+    @property
+    def service(self):
+        return build('calendar', 'v3', credentials=self.credentials)
+
+    def get_events(self, year, month):
+        first = datetime.datetime(year, month, 1)
+        last = first.replace(day=calendar.monthrange(year, month)[1], hour=23, minute=59)
+
+        events = self.service.events().list(calendarId='primary',
+                                            timeMin=first.isoformat()+'Z',
+                                            timeMax=last.isoformat()+'Z',
+                                            singleEvents=True).execute()
+        ret = {}
+        for event in events['items']:
+            if('summary' in event):
+                if 'date' in event['start']:
+                    date = datetime.datetime.strptime(event['start']['date'][0:10], '%Y-%m-%d')
+                elif 'dateTime' in event['start']:
+                    date = datetime.datetime.strptime(event['start']['dateTime'][0:16], '%Y-%m-%dT%H:%M')
+                ret.setdefault(date.day, [])
+                ret[date.day].append((date.time().strftime('%H:%M'), event['summary']))
+
+        return ret

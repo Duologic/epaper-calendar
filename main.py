@@ -67,9 +67,11 @@ if not b.is_authenticated:
     b.wait_fetch_token()
 
 if b.is_authenticated:
-    b, r = draw_month()
+    events = b.get_events(2019, 9)
+    b, r = draw_month(2019, 9, events)
     if epd_enabled:
         epd.display(epd.getbuffer(b), epd.getbuffer(r))
     else:
+        print(events)
         b.show()
         r.show()
