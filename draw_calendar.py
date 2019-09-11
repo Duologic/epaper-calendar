@@ -1,4 +1,5 @@
 # coding: utf-8
+import os.path
 import datetime
 import calendar
 
@@ -17,7 +18,10 @@ def draw_month():
     BOX_WIDTH = EPD_WIDTH/COLS
     BOX_HEIGHT = (EPD_HEIGHT/ROWS) - (TOP_ROW/ROWS)
 
-    font = ImageFont.truetype('/Users/duologic/Library/Fonts/DejaVu Sans Mono Bold for Powerline.ttf', 12)
+    if os.path.exists('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf'):
+        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 12)
+    else:
+        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 12)
 
     black_image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 1)
     black_draw = ImageDraw.Draw(black_image)

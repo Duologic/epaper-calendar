@@ -1,4 +1,5 @@
 # coding: utf-8
+import os.path
 import pyqrcode
 
 from auth import GoogleCalendar
@@ -32,14 +33,16 @@ if not b.is_authenticated:
     black_image.paste(qr_image, (int((EPD_WIDTH-qr_image.width)/2), 12))
 
     black_draw = ImageDraw.Draw(black_image)
-    font_url = ImageFont.truetype('/Users/duologic/Library/Fonts/DejaVu Sans Mono Bold for Powerline.ttf', 12)
-    font_code = ImageFont.truetype('/Users/duologic/Library/Fonts/DejaVu Sans Mono Bold for Powerline.ttf', 20)
 
     line_spacing = 6
     start = qr_image.height+line_spacing
 
     def draw_text(msg, size, top):
-        font = ImageFont.truetype('/Users/duologic/Library/Fonts/DejaVu Sans Mono Bold for Powerline.ttf', size)
+        if os.path.exists('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf'):
+            font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', size)
+        else:
+            font = ImageFont.truetype('/Library/Fonts/Arial.ttf', size)
+
         w, h = black_draw.textsize(msg, font=font)
         black_draw.text(((EPD_WIDTH-w)/2, top), msg, font=font)
         return top + h + line_spacing
