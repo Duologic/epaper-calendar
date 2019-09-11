@@ -50,15 +50,18 @@ def draw_month():
     c = calendar.TextCalendar()
     today = datetime.date.today()
     count = 0
+    text_padding = 2
     for day in c.itermonthdays(2019, 9):
         col = count - (COLS * (count // COLS))
         row = count // COLS
         if day > 0:
-            black_draw.text((col*BOX_WIDTH+10, row*BOX_HEIGHT+10+TOP_ROW), '{}'.format(day), font=font)
+            black_draw.text((col*BOX_WIDTH+text_padding,
+                             row*BOX_HEIGHT+text_padding+TOP_ROW),
+                            '{}'.format(day), font=font)
 
             if day == today.day:
-                red_draw.text((col*BOX_WIDTH+10,
-                               row*BOX_HEIGHT+10+TOP_ROW),
+                red_draw.text((col*BOX_WIDTH+text_padding,
+                               row*BOX_HEIGHT+text_padding+TOP_ROW),
                               '{}'.format(day),
                               font=font)
                 red_draw.rectangle((col*BOX_WIDTH,
