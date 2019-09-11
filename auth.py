@@ -96,7 +96,8 @@ class GoogleCalendar(object):
                     date = datetime.datetime.strptime(event['start']['date'][0:10], '%Y-%m-%d')
                 elif 'dateTime' in event['start']:
                     date = datetime.datetime.strptime(event['start']['dateTime'][0:16], '%Y-%m-%dT%H:%M')
-                ret.setdefault(date.day, [])
-                ret[date.day].append((date.time().strftime('%H:%M'), event['summary']))
+                if date.year == year and date.month == month:
+                    ret.setdefault(date.day, [])
+                    ret[date.day].append((date.time().strftime('%H:%M'), event['summary']))
 
         return ret
