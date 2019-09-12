@@ -74,6 +74,15 @@ if b.is_authenticated:
     if epd_enabled:
         epd.display(epd.getbuffer(b), epd.getbuffer(r))
     else:
-        print(events)
-        b.show()
-        r.show()
+        b = b.convert('RGBA')
+        r = r.convert('RGBA')
+        for y in range(r.size[1]):
+            for x in range(r.size[0]):
+                # Replace black by red
+                if r.getpixel((x, y)) == (0, 0, 0, 255):
+                    r.putpixel((x, y), (255, 0, 0, 255))
+                # Replace white by transparent
+                if r.getpixel((x, y)) == (255, 255, 255, 255):
+                    r.putpixel((x, y), (0, 0, 0, 0))
+        img = Image.alpha_composite(b, r)
+        img.show()
