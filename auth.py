@@ -88,7 +88,8 @@ class GoogleCalendar(object):
         events = self.service.events().list(calendarId='primary',
                                             timeMin=first.isoformat()+'Z',
                                             timeMax=last.isoformat()+'Z',
-                                            singleEvents=True).execute()
+                                            singleEvents=True,
+                                            orderBy='startTime').execute()
         ret = {}
         for event in events['items']:
             if('summary' in event):

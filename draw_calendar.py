@@ -1,6 +1,5 @@
 # coding: utf-8
 import os.path
-import datetime
 import calendar
 
 from PIL import Image
@@ -11,7 +10,7 @@ EPD_WIDTH = 640
 EPD_HEIGHT = 384
 
 
-def draw_month(year, month, events):
+def draw_month(year, month, events, select):
     ROWS = 6
     COLS = 7
     TOP_ROW = 12
@@ -48,7 +47,6 @@ def draw_month(year, month, events):
         col += 1
 
     c = calendar.TextCalendar()
-    today = datetime.date.today()
     count = 0
     text_padding = 2
     for day in c.itermonthdays(year, month):
@@ -59,7 +57,7 @@ def draw_month(year, month, events):
                              row*BOX_HEIGHT+text_padding+TOP_ROW),
                             '{}'.format(day), font=font)
 
-            if day == today.day:
+            if day == select:
                 red_draw.text((col*BOX_WIDTH+text_padding,
                                row*BOX_HEIGHT+text_padding+TOP_ROW),
                               '{}'.format(day),
@@ -72,14 +70,24 @@ def draw_month(year, month, events):
             if day in events:
                 line = 1
                 for event in events[day]:
-                    black_draw.text((col*BOX_WIDTH+text_padding,
-                                     row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
-                                    '{}'.format(event[1][0:16]), font=font)
-                    line += 1
-                    if line == 4:
+                    if day == select:
+                        red_draw.text((col*BOX_WIDTH+text_padding,
+                                       row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
+                                      '{} '.format(event[1][0:16]), font=font)
+                    else:
                         black_draw.text((col*BOX_WIDTH+text_padding,
                                          row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
-                                        'more...', font=font)
+                                        '{} '.format(event[1][0:16]), font=font)
+                    line += 1
+                    if line == 4:
+                        if day == select:
+                            red_draw.text((col*BOX_WIDTH+text_padding,
+                                           row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
+                                          'more...', font=font)
+                        else:
+                            black_draw.text((col*BOX_WIDTH+text_padding,
+                                             row*BOX_HEIGHT+text_padding+TOP_ROW+font.size*line),
+                                            'more...', font=font)
                         break
 
         count += 1

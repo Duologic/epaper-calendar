@@ -1,4 +1,5 @@
 # coding: utf-8
+import datetime
 import os.path
 import pyqrcode
 
@@ -67,8 +68,9 @@ if not b.is_authenticated:
     b.wait_fetch_token()
 
 if b.is_authenticated:
-    events = b.get_events(2019, 9)
-    b, r = draw_month(2019, 9, events)
+    today = datetime.date.today()
+    events = b.get_events(today.year, today.month)
+    b, r = draw_month(today.year, today.month, events, today.day)
     if epd_enabled:
         epd.display(epd.getbuffer(b), epd.getbuffer(r))
     else:
