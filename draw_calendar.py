@@ -11,22 +11,41 @@ EPD_HEIGHT = 384
 
 
 def draw_month(year, month, events, select):
+    weekdays = []
+    for day in calendar.weekheader(10).split(' '):
+        if day.strip():
+            weekdays.append(day.strip())
+
     ROWS = 6
-    COLS = 7
-    TOP_ROW = 12
+    COLS = len(weekdays)
+    FONT_SIZE = 10
+    LINES = 2
+    TOP_ROW = FONT_SIZE*LINES + 2*LINES
     BOX_WIDTH = EPD_WIDTH/COLS
     BOX_HEIGHT = (EPD_HEIGHT/ROWS) - (TOP_ROW/ROWS)
 
     if os.path.exists('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf'):
-        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf', 10)
+        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/VeraB.ttf', FONT_SIZE)
     else:
-        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', 10)
+        font = ImageFont.truetype('/Library/Fonts/Arial.ttf', FONT_SIZE)
 
     black_image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 1)
     black_draw = ImageDraw.Draw(black_image)
 
     red_image = Image.new('1', (EPD_WIDTH, EPD_HEIGHT), 1)
     red_draw = ImageDraw.Draw(red_image)
+
+    line = 0
+    w, h = black_draw.textsize('{} {} '.format(calendar.month_name[month], year), font=font)
+    start = ((EPD_WIDTH-w)/2, FONT_SIZE*line)
+    red_draw.text(start, '{} {} '.format(calendar.month_name[month], year), font=font)
+
+    line = 1
+    col = 0
+    for day in weekdays:
+        start = (col*BOX_WIDTH+2, FONT_SIZE*line)
+        black_draw.text(start, '{} '.format(day), font=font)
+        col += 1
 
     start = (0, TOP_ROW)
     end = (EPD_WIDTH, TOP_ROW)
