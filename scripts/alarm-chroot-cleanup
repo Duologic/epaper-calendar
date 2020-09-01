@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+mv root/etc/resolv.conf.bak root/etc/resolv.conf 
+rm root/usr/bin/qemu-arm-static
+umount -R root
+losetup --detach-all

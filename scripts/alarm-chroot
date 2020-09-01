@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+losetup --detach-all
+losetup -fP "epaper-pi.img"
+LO=$(losetup -a | awk -F':' '{ print $1 }')
+
+mount ${LO}p2 root
+mount ${LO}p1 root/boot
+
+mount -t proc none root/proc
+mount -t sysfs none root/sys
+mount -o bind /dev root/dev
+
+mv root/etc/resolv.conf root/etc/resolv.conf.bak
+cp /etc/resolv.conf root/etc/resolv.conf
+cp /usr/bin/qemu-arm-static root/usr/bin/
+
+chroot root
