@@ -65,6 +65,7 @@ if not b.is_authenticated:
     else:
         black_image.show()
 
+    print("waiting for token")
     b.wait_fetch_token()
 
 if b.is_authenticated:

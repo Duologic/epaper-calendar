@@ -6,3 +6,4 @@ pyqrcode
 pypng
 RPi.GPIO
 spidev
+-e waveshare/RaspberryPi&JetsonNano/python/

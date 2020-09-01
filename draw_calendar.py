@@ -16,7 +16,7 @@ def draw_month(year, month, events, select):
         if day.strip():
             weekdays.append(day.strip())
 
-    ROWS = 6
+    ROWS = 5
     COLS = len(weekdays)
     FONT_SIZE = 10
     LINES = 2
@@ -24,8 +24,8 @@ def draw_month(year, month, events, select):
     BOX_WIDTH = EPD_WIDTH/COLS
     BOX_HEIGHT = (EPD_HEIGHT/ROWS) - (TOP_ROW/ROWS)
 
-    if os.path.exists('/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf'):
-        font = ImageFont.truetype('/usr/share/fonts/truetype/ttf-bitstream-vera/VeraB.ttf', FONT_SIZE)
+    if os.path.exists('/usr/share/fonts/TTF/Vera.ttf'):
+        font = ImageFont.truetype('/usr/share/fonts/TTF/VeraBd.ttf', FONT_SIZE)
     else:
         font = ImageFont.truetype('/Library/Fonts/Arial.ttf', FONT_SIZE)
 
